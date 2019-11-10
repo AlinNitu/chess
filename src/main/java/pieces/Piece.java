@@ -1,5 +1,6 @@
 package pieces;
 
+import chess.Board;
 import chess.ChessGame;
 import chess.Location;
 
@@ -51,10 +52,83 @@ public abstract class Piece implements PieceInterface {
         }
 
         //diagonal
-        return true;
+        if (start.getCol() - end.getCol() == start.getRow() - end.getRow()) {
+            int one = (start.getRow() - end.getRow() < 0) ? 1: -1;
+            for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
+                if (chessGame.getBoard().spotHasPiece(start.getRow() + inc, start.getCol() + inc)) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (start.getCol() - end.getCol() * -1 ==
+                start.getRow() - end.getCol()) {
+
+            int one = (start.getRow() - end.getRow() < 0) ? 1: -1;
+            int negOne = one * -1;
+            for (int i = one; Math.abs(i) < Math.abs(start.getRow() - end.getRow()); i += one) {
+                if (chessGame.getBoard().spotHasPiece(start.getRow() + i, start.getCol() + (i * negOne))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
+    protected void updateVertical(int one) {
+        Location location = new Location(chessLocation.getRow() + one, chessLocation.getCol());
+        //int i = one;
+        while (Board.locationOnBoard(location)) {
+            Piece piece = chessGame.getBoard().getPieceFrom(location);
+            if (piece != null) {
+                if (!piece.getOwner().equalsIgnoreCase(owner)) {
+                    unsafeLocations.add(location);
+                    return;
+                } else if (!location.equals(location)) {
+                    unsafeLocations.add(new Location(location.getRow() - one, location.getCol()));
+                    return;
+                }
+            } else {
+                location = new Location(location.getRow() + one, location.getCol());
+            }
+        }
+    }
 
+    protected void updateHorizontal(int one){
+        Location location = new Location(chessLocation.getRow(), chessLocation.getCol() + one);
+        while (Board.locationOnBoard(location)) {
+            Piece piece = chessGame.getBoard().getPieceFrom(location);
+            if (piece != null) {
+                if (!piece.getOwner().equalsIgnoreCase(owner)) {
+                    unsafeLocations.add(location);
+                    return;
+                } else if (!chessLocation.equals(location)) {
+                    unsafeLocations.add(new Location(location.getRow(), location.getCol() - one));
+                    return;
+                }
+            } else {
+                location = new Location(location.getRow(), location.getCol() + one);
+            }
+        }
+    }
+
+    protected void updateDiagonal(int rowOne, int colOne) {
+        Location location = new Location(chessLocation.getRow() + rowOne, chessLocation.getCol() + colOne);
+        while (Board.locationOnBoard(location)) {
+            Piece piece = chessGame.getBoard().getPieceFrom(location);
+            if (piece != null) {
+                if (!piece.getOwner().equalsIgnoreCase(owner)) {
+                    unsafeLocations.add(location);
+                    return;
+                } else if (!chessLocation.equals(location)) {
+                    unsafeLocations.add(new Location(location.getRow() - rowOne, location.getCol() - colOne));
+                    return;
+                }
+            } else {
+                location = new Location(location.getRow() + rowOne, location.getCol() + colOne);
+            }
+        }
+    }
 
 
     public Location getChessLocation() {
@@ -67,6 +141,10 @@ public abstract class Piece implements PieceInterface {
 
     public char getId() {
         return id;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
 }

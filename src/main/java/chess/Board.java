@@ -16,7 +16,7 @@ public class Board {
         return board[row][col] != null;
     }
 
-    private void putPieceTo (Piece piece, Location location) {
+    public void putPieceTo (Piece piece, Location location) {
 
         if (spotHasPiece(location.getRow(), location.getCol())) {
             removePieceFrom(location);

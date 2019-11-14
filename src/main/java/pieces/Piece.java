@@ -13,16 +13,16 @@ public abstract class Piece implements PieceInterface {
     protected String owner;
     protected Location chessLocation;
     protected char id;
-    protected ArrayList<Location> unsafeLocations;
+    protected ArrayList<Location> unsafeLocation;
 
-    protected abstract void updateUnsafeLocations();
+    protected abstract void updateUnsafeLocation();
 
 // Setting the members of Piece
     public Piece(String owner, Location initialLocation, ChessGame game) {
         this.owner = owner;
         chessLocation = null;
         chessGame = game;
-        unsafeLocations = new ArrayList<>();
+        unsafeLocation = new ArrayList<>();
         //chessGame
     }
 
@@ -82,10 +82,10 @@ public abstract class Piece implements PieceInterface {
             Piece piece = chessGame.getBoard().getPieceFrom(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    unsafeLocations.add(location);
+                    unsafeLocation.add(location);
                     return;
                 } else if (!location.equals(location)) {
-                    unsafeLocations.add(new Location(location.getRow() - one, location.getCol()));
+                    unsafeLocation.add(new Location(location.getRow() - one, location.getCol()));
                     return;
                 }
             } else {
@@ -100,10 +100,10 @@ public abstract class Piece implements PieceInterface {
             Piece piece = chessGame.getBoard().getPieceFrom(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    unsafeLocations.add(location);
+                    unsafeLocation.add(location);
                     return;
                 } else if (!chessLocation.equals(location)) {
-                    unsafeLocations.add(new Location(location.getRow(), location.getCol() - one));
+                    unsafeLocation.add(new Location(location.getRow(), location.getCol() - one));
                     return;
                 }
             } else {
@@ -118,10 +118,10 @@ public abstract class Piece implements PieceInterface {
             Piece piece = chessGame.getBoard().getPieceFrom(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    unsafeLocations.add(location);
+                    unsafeLocation.add(location);
                     return;
                 } else if (!chessLocation.equals(location)) {
-                    unsafeLocations.add(new Location(location.getRow() - rowOne, location.getCol() - colOne));
+                    unsafeLocation.add(new Location(location.getRow() - rowOne, location.getCol() - colOne));
                     return;
                 }
             } else {
@@ -130,6 +130,17 @@ public abstract class Piece implements PieceInterface {
         }
     }
 
+
+    public boolean moveTo(Location newLocation) {
+        Board board = chessGame.getBoard();
+        Piece oldPiece = board.getPieceFrom(newLocation);
+
+        if (oldPiece == null || oldPiece.getOwner() != owner) {
+            board.putPieceTo(this, newLocation);
+            return true;
+        }
+        return false;
+    }
 
     public Location getChessLocation() {
         return chessLocation;
@@ -147,4 +158,7 @@ public abstract class Piece implements PieceInterface {
         return owner;
     }
 
+    public ArrayList<Location> getUnsafeLocation() {
+        return unsafeLocation;
+    }
 }

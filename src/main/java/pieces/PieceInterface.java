@@ -4,6 +4,6 @@ import chess.Location;
 
 public interface PieceInterface {
 
-    public boolean moveTo (Location location);
+    boolean moveTo (Location location);
 
 }

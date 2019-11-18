@@ -15,9 +15,9 @@ public class Location {
     @Override
     public boolean equals(Object obj) {
 
-        if (obj !=null && obj instanceof Location){
-            Location location = (Location) obj;
-            return (row == location.getRow() && col == location.getCol());
+        if (obj != null && obj instanceof Location){
+            Location loc = (Location) obj;
+            return (row == loc.getRow() && col == loc.getCol());
         }
         return false;
     }

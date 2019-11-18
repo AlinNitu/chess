@@ -3,31 +3,34 @@ package pieces;
 import chess.ChessGame;
 import chess.Location;
 
-public class Bishop extends Piece {
+public class Rook extends Piece {
 
-    public Bishop (String owner, Location initialLocation, ChessGame game) {
+    public Rook(String owner, Location initialLocation, ChessGame game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'B';
+            id = 'R';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'b';
+            id = 'r';
         }
     }
 
     @Override
     public boolean moveTo(Location location) {
-        if (Math.abs(chessLocation.getRow() - location.getRow()) ==
-                Math.abs(chessLocation.getCol() - location.getCol())) {
+        if ((chessLocation.getRow() == location.getRow()) !=
+                (chessLocation.getCol() == location.getCol())) {
+
             return checkFreeLine(chessLocation, location) && super.moveTo(location);
         }
         return false;
     }
 
+    @Override
     protected void updateUnsafeLocation() {
         unsafeLocation.clear();
-        super.updateDiagonal(1,1);
-        super.updateDiagonal(-1, 1);
-        super.updateDiagonal(1, -1);
-        super.updateDiagonal(-1, -1);
+
+        super.updateVertical(1);
+        super.updateVertical(-1);
+        super.updateHorizontal(1);
+        super.updateHorizontal(-1);
     }
 }

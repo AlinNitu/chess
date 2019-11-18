@@ -23,7 +23,7 @@ public abstract class Piece implements PieceInterface {
         chessLocation = null;
         chessGame = game;
         unsafeLocation = new ArrayList<>();
-        //chessGame
+        chessGame.getBoard().putPieceTo(this, initialLocation);
     }
 
 // Checks until where the move is available (horizontal, vertical and diagonal)

@@ -7,8 +7,8 @@ import chess.Location;
 public class King extends Piece {
 
 
-    public King(String owner, Location location, ChessGame game) {
-        super (owner, location, game);
+    public King(String owner, Location initialLocation, ChessGame game) {
+        super (owner, initialLocation, game);
 
         if (owner.equalsIgnoreCase("player1")) {
             id = 'K';
